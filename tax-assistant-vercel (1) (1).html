@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>עוזר מס | דו״ח שנתי 2022</title>
+<style>
+:root{
+  --bg:#0d0f14;--surface:#161a24;--s2:#1e2333;--border:#2a3050;
+  --accent:#4f7fff;--accent2:#7c5cff;--glow:rgba(79,127,255,.18);
+  --text:#e8ecf8;--muted:#7a849e;--dim:#4a5270;
+  --ok:#2dd4a0;--warn:#f5a623;--err:#ff5c72;--tag:rgba(79,127,255,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.header{width:100%;padding:20px 36px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:11px}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-text{font-size:17px;font-weight:700}
+.logo-sub{font-size:11px;color:var(--muted)}
+.badge{background:var(--tag);border:1px solid rgba(79,127,255,.3);color:var(--accent);padding:4px 13px;border-radius:20px;font-size:12px;font-weight:500}
+.main{flex:1;width:100%;max-width:740px;padding:38px 22px}
+.prog-wrap{margin-bottom:30px}
+.prog-head{display:flex;justify-content:space-between;margin-bottom:8px}
+.sec-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:500}
+.prog-count{font-size:12px;color:var(--muted)}
+.track{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(79,127,255,.5)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.chip{padding:4px 13px;border-radius:20px;font-size:12px;border:1px solid var(--border);color:var(--dim)}
+.chip.active{background:var(--tag);border-color:rgba(79,127,255,.4);color:var(--accent)}
+.chip.done{background:rgba(45,212,160,.08);border-color:rgba(45,212,160,.3);color:var(--ok)}
+.ai{background:var(--s2);border:1px solid var(--border);border-radius:13px;border-top-right-radius:4px;padding:11px 15px;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:15px}
+.ai-name{font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.dot{width:6px;height:6px;background:var(--ok);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:30px;margin-bottom:15px;animation:slideIn .3s ease;box-shadow:0 8px 40px rgba(0,0,0,.4);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle,var(--glow),transparent 70%);pointer-events:none}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.q-meta{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase;font-weight:500;margin-bottom:10px}
+.q-meta::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(79,127,255,.3),transparent)}
+.ftag{background:rgba(79,127,255,.1);border:1px solid rgba(79,127,255,.25);color:var(--accent);font-size:10px;padding:1px 6px;border-radius:5px;font-weight:600}
+.q-text{font-size:21px;font-weight:600;line-height:1.45;margin-bottom:5px}
+.q-hint{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+.grid{display:grid;gap:9px}
+.grid.two{grid-template-columns:1fr 1fr}
+.opt{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:13px 16px;border-radius:12px;cursor:pointer;text-align:right;font-size:14px;transition:all .16s;display:flex;align-items:center;gap:10px;font-family:inherit}
+.opt:hover{border-color:rgba(79,127,255,.5);background:rgba(79,127,255,.07);transform:translateY(-1px)}
+.opt.sel{border-color:var(--accent);background:rgba(79,127,255,.12);color:#a8c0ff;box-shadow:0 0 0 1px var(--accent) inset}
+.opt-icon{font-size:18px;flex-shrink:0}
+.opt-desc{font-size:12px;color:var(--muted);margin-top:2px}
+.chk{background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .16s}
+.chk:hover{border-color:rgba(79,127,255,.4);background:rgba(79,127,255,.05)}
+.chk.on{border-color:var(--accent);background:rgba(79,127,255,.1)}
+.box{width:20px;height:20px;border:2px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .16s}
+.chk.on .box{background:var(--accent);border-color:var(--accent)}
+.inp{width:100%;background:var(--s2);border:1px solid var(--border);color:var(--text);padding:13px 16px;border-radius:12px;font-size:16px;outline:none;transition:all .2s;direction:rtl;font-family:inherit}
+.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,127,255,.15)}
+.inp::placeholder{color:var(--dim)}
+.inp.err{border-color:var(--err)}
+.ig{display:flex;gap:9px;align-items:center}
+.pfx{color:var(--muted);font-size:14px;background:var(--s2);border:1px solid var(--border);padding:13px;border-radius:12px}
+.vm{font-size:12px;margin-top:6px}
+.vm.ok{color:var(--ok)}.vm.er{color:var(--err)}
+.actions{display:flex;gap:10px;margin-top:22px}
+.btn-next{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;padding:13px 28px;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(79,127,255,.3);font-family:inherit}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(79,127,255,.45)}
+.btn-next:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-back{background:transparent;color:var(--muted);border:1px solid var(--border);padding:13px 20px;border-radius:12px;font-size:15px;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-back:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+.info{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25);border-radius:10px;padding:12px 15px;font-size:13px;color:#c4913a;margin-top:10px;line-height:1.6}
+.info.ok{background:rgba(45,212,160,.06);border-color:rgba(45,212,160,.2);color:#2dd4a0}
+/* privacy */
+.priv-toggle{background:var(--s2);border:1px solid rgba(79,127,255,.3);border-radius:13px;padding:15px 17px;margin-bottom:16px;cursor:pointer;display:flex;align-items:center;gap:13px;transition:all .2s}
+.priv-toggle:hover{border-color:rgba(79,127,255,.6)}
+.priv-toggle.on{border-color:var(--accent);background:rgba(79,127,255,.07)}
+.tog-sw{width:40px;height:22px;background:var(--border);border-radius:11px;position:relative;transition:background .2s;flex-shrink:0}
+.tog-sw::after{content:'';position:absolute;top:3px;right:3px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s}
+.priv-toggle.on .tog-sw{background:var(--accent)}
+.priv-toggle.on .tog-sw::after{transform:translateX(-18px)}
+.priv-text strong{display:block;font-size:14px;margin-bottom:2px}
+.priv-text span{font-size:12px;color:var(--muted);line-height:1.5}
+.sens-fields{background:rgba(79,127,255,.04);border:1px solid rgba(79,127,255,.15);border-radius:12px;padding:18px;margin-top:12px;display:none}
+.sens-fields.show{display:block}
+.sens-label{font-size:12px;color:var(--muted);margin-bottom:5px;display:block}
+.sens-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+/* summary */
+.sum-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;animation:slideIn .4s ease}
+.sum-title{font-size:24px;font-weight:700;margin-bottom:5px}
+.sum-sub{color:var(--muted);font-size:13px;margin-bottom:26px}
+.sum-sec{margin-bottom:20px}
+.sum-sec-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);font-weight:500;margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.sum-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px solid rgba(42,48,80,.5);gap:20px}
+.sum-row:last-child{border-bottom:none}
+.sum-key{color:var(--muted);flex-shrink:0}
+.sum-val{font-weight:500}
+/* guide */
+.guide-box{background:var(--s2);border:1px solid var(--border);border-radius:13px;padding:20px;margin-top:16px}
+.guide-section{margin-bottom:18px}
+.guide-section-title{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:600;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(42,48,80,.6)}
+.guide-row{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid rgba(42,48,80,.35);font-size:13px;align-items:flex-start}
+.guide-row:last-child{border-bottom:none}
+.g-field{background:var(--tag);color:var(--accent);font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap;flex-shrink:0;align-self:center;min-width:70px;text-align:center}
+.g-desc{flex:1;line-height:1.5}
+.g-src{color:var(--muted);font-size:11px;margin-top:2px}
+.export-btns{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn-export{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:11px 20px;border-radius:12px;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-family:inherit}
+.btn-export:hover{border-color:rgba(79,127,255,.5);background:rgba(79,127,255,.07)}
+@media print{
+  .header,.actions,.export-btns,.ai,.chips,.prog-wrap{display:none!important}
+  body{background:white;color:black}
+  .sum-card{box-shadow:none;border:none}
+  .guide-box{background:#f8f9ff;border:1px solid #dde}
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">📋</div>
+    <div><div class="logo-text">עוזר מס חכם</div><div class="logo-sub">טופס 1301 – רשות המסים</div></div>
+  </div>
+  <div class="badge">שנת מס 2022</div>
+</div>
+<div class="main"><div id="app"></div></div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTIONS – מיפוי לחלקים בטופס 1301
+// ─────────────────────────────────────────────────────────────────────────────
+// חלק א'  – פרטים כלליים (עמוד 1)
+// חלק ב'  – פרטים אישיים (עמוד 1)
+// חלק ד'  – הכנסות חייבות בשיעורי מס רגילים (עמוד 2: שכיר שדות 158/172, עצמאי שדות 150/170, קצבה 258/272)
+// חלק ה'  – הכנסות בשיעורי מס מיוחדים (עמוד 2: שכירות 222/284, ריבית, דיבידנד, קריפטו)
+// חלק ו'  – מוסד כספי (עמוד 2) – לא רלוונטי לרוב הנישומים
+// חלק ז'  – נתונים נוספים (עמוד 2: מחזור 238/239 – עצמאי בלבד)
+// חלק ח'  – רווח הון ושבח (עמוד 3: נספח ג/ג1/ג2 – משקיעים בלבד)
+// חלק ט'  – הכנסות חו"ל (עמוד 3: 290 + נספח ד)
+// חלק י'  – הכנסות/רווחים פטורים (עמוד 3: 109/332/309 – נכה, שכ"ד פטור)
+// חלק יא' – פרטים נוספים ויתרות (עמוד 3: הפסדים 079/166/179 – עצמאי/משקיע)
+// חלק יב' – ניכויים אישיים (עמוד 3: פנסיה 135/180, קה"ש 136/137, ביטוח לאומי 030/089)
+// חלק יג' – נקודות זיכוי (עמוד 3: תושב 020, ילדים 260/262, חייל 024/124, תואר 181/182)
+// חלק יד' – זיכויים אישיים (עמוד 4: ביטוח חיים 036/081, תרומות 037/237, קצבה 045/268)
+// חלק טו' – מחזור למקדמות (עמוד 4: ניכוי ממשכורת 042, ריבית 043, שבח 041)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SECS=['פרטים אישיים','הכנסות','ניכויים וזיכויים','פרטים נוספים'];
+
+// פונקציית עזר: נגזר עובדות מהתשובות
+function F(a){
+  const age=parseInt(a.age_num)||0;
+  // שכיר = employee_simple / employee_complex / complex, או שסימן salary במקורות
+  const isSalary=['employee_simple','employee_complex','complex'].includes(a.profile)||!!a.income_sources?.includes('salary');
+  // עצמאי = self_employed / complex, או שסימן self במקורות
+  const isSelf=['self_employed','complex'].includes(a.profile)||!!a.income_sources?.includes('self');
+  // משקיע = investor / complex, או שסימן capital/rent
+  const isInv=['investor','complex'].includes(a.profile)||!!a.income_sources?.includes('capital')||!!a.income_sources?.includes('rent');
+  // פנסיונר = retiree, או גיל 60+ שסימן pension
+  const isRetired=a.profile==='retiree'||(age>=60&&!!a.income_sources?.includes('pension'));
+  // האם יש לו הכנסות מחו"ל
+  const hasAbroad=!!a.income_sources?.includes('abroad')||['new_imm','ret_senior','returning'].includes(a.immigration);
+  return{age,isSalary,isSelf,isInv,isRetired,hasAbroad,
+    canBeSoldier:age>=18&&age<=42,
+    canHaveDegree:age>=22&&age<=52};
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// QUESTIONS
+// כל שאלה: id, sec (סקשן תצוגה), cond (תנאי הצגה), fieldRef (שדה בטופס)
+// ─────────────────────────────────────────────────────────────────────────────
+const QS=[
+
+  // ══ SEC 0: פרטים אישיים (חלקים א'+ב' בטופס) ══════════════════════════════
+
+  {id:'profile',sec:0,
+   text:'מה מתאר אותך הכי טוב?',
+   hint:'קובע את כל מסלול השאלות.',
+   type:'opt',
+   opts:[
+    {v:'employee_simple', l:'שכיר/ה – מעסיק אחד',                i:'💼'},
+    {v:'employee_complex',l:'שכיר/ה – מספר מעסיקים / הכנסות נוספות',i:'👔'},
+    {v:'self_employed',   l:'עצמאי/ת או בעל/ת עסק',              i:'🏪'},
+    {v:'investor',        l:'משקיע/ה – נדל"ן / ני"ע / קריפטו',   i:'📊'},
+    {v:'retiree',         l:'פנסיונר/ית – קצבה בלבד',             i:'🏦'},
+    {v:'complex',         l:'שילוב של מספר מקורות',                i:'🔀'},
+  ]},
+
+  {id:'marital',sec:0,
+   text:'מה המצב המשפחתי שלך בשנת 2022?',
+   hint:'משפיע על חישוב המס ועל האפשרות להגיש דוח משותף.',
+   type:'opt',fieldRef:'חלק א – מצב משפחתי',
+   opts:[{v:'single',l:'רווק/ה',i:'🧑'},{v:'married',l:'נשוי/אה וחי/ה יחד',i:'👫'},
+         {v:'separated',l:'פרוד/ה',i:'↔️'},{v:'divorced',l:'גרוש/ה',i:'📄'},{v:'widowed',l:'אלמן/ה',i:'🕊️'}]},
+
+  {id:'age_num',sec:0,
+   text:'מה גילך נכון ל-31.12.2022?',
+   hint:'הקלד מספר. קובע ישירות אילו נקודות זיכוי רלוונטיות לך.',
+   type:'age',fieldRef:'חלק ב – גיל'},
+
+  // ילדים – גיל 18+ בלבד
+  {id:'has_children',sec:0,cond:a=>F(a).age>=18,
+   text:'האם יש לך ילדים מתחת לגיל 18 בשנת 2022?',
+   hint:'ילדים מזכים בנקודות זיכוי (חלק יג\' בטופס).',
+   type:'opt',layout:'two',fieldRef:'חלק יג – שדה 260/262',
+   opts:[{v:'no',l:'אין ילדים',i:'✗'},{v:'yes',l:'כן',i:'👶'}]},
+
+  {id:'children_custody',sec:0,cond:a=>a.has_children==='yes',
+   text:'הילדים נמצאים בחזקתך?',
+   type:'opt',fieldRef:'שדה 260/262',
+   opts:[{v:'full',l:'כן, חזקה מלאה',i:'🏠'},{v:'shared',l:'משמורת משותפת',i:'↔️'},{v:'none',l:'לא בחזקתי (משלם/ת מזונות)',i:'💸'}]},
+
+  {id:'children_count',sec:0,cond:a=>a.has_children==='yes',
+   text:'כמה ילדים (מתחת לגיל 18)?',
+   hint:'הקלד מספר.',type:'int',min:1,max:15,ph:'0',fieldRef:'שדה 260'},
+
+  // הורה יחידני – גרוש/ה / אלמן/ה + ילדים בחזקה
+  {id:'single_parent',sec:0,
+   cond:a=>a.has_children==='yes'&&['divorced','widowed','separated'].includes(a.marital)&&['full','shared'].includes(a.children_custody),
+   text:'האם אתה/את הורה יחידני/ת?',
+   hint:'מזכה בנקודת זיכוי נוספת (שדה 026).',
+   type:'opt',layout:'two',fieldRef:'חלק יג – שדה 026',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'👤'}]},
+
+  // נכות – לכולם
+  {id:'disability',sec:0,
+   text:'האם אתה/את (או בן/בת זוגך) נכה לפי סעיף 9(5)?',
+   hint:'נכות 100% – פטור על הכנסות (חלק י\', שדה 109).',
+   type:'opt',layout:'two',fieldRef:'חלק י – שדה 109',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'♿'}]},
+
+  // עולה/חוזר – לכולם
+  {id:'immigration',sec:0,
+   text:'מה מעמדך?',
+   hint:'עולים ותושבים חוזרים ותיקים – הקלות מס על הכנסות מחו"ל (שדות 274/273).',
+   type:'opt',fieldRef:'חלק א – שדות 274/273',
+   opts:[{v:'israeli',l:'אזרח/ית ישראלי/ת רגיל/ה',i:'🇮🇱'},{v:'new_imm',l:'עולה חדש/ה',i:'✈️'},
+         {v:'ret_senior',l:'תושב/ת חוזר/ת ותיק/ה',i:'🔄'},{v:'returning',l:'תושב/ת חוזר/ת',i:'↩️'}]},
+
+  // ══ SEC 1: הכנסות ══════════════════════════════════════════════════════════
+  // מקורות הכנסה – רק לפרופילים מורכבים (לשאר ברור מהפרופיל)
+
+  {id:'income_sources',sec:1,
+   cond:a=>['employee_complex','complex','investor'].includes(a.profile),
+   text:'אילו מקורות הכנסה היו לך ב-2022? (סמן הכל)',
+   hint:'קובע אילו שדות ממלאים בחלק ד\' ו-ה\' בטופס.',
+   type:'multi',fieldRef:'חלק ד – מקורות הכנסה',
+   opts:[{v:'salary',l:'משכורת (שכיר/ה)',i:'💼'},{v:'self',l:'עסק / עצמאי',i:'🏪'},
+         {v:'pension',l:'קצבה / פנסיה',i:'🏦'},{v:'rent',l:'שכירות נכסים',i:'🏠'},
+         {v:'capital',l:'ני"ע / ריבית / דיבידנד',i:'📈'},{v:'abroad',l:'הכנסות מחו"ל',i:'🌍'}]},
+
+  // ── חלק ד': הכנסות בשיעורי מס רגילים ──
+
+  // שכיר – שדה 158/172 בחלק ד'
+  {id:'salary_amount',sec:1,cond:a=>F(a).isSalary,
+   text:'מה הכנסת העבודה השנתית הברוטו שלך?',
+   hint:'מטופס 106, שדה "סך הכנסה ברוטו". אם עבדת אצל מספר מעסיקים – סכם את כולם.',
+   type:'amount',ph:'0',fieldRef:'חלק ד – שדה 158'},
+
+  // מספר מעסיקים – שכיר בלבד
+  {id:'num_employers',sec:1,cond:a=>F(a).isSalary,
+   text:'אצל כמה מעסיקים עבדת ב-2022?',
+   hint:'מספר מעסיקים = סיכום טפסי 106 + בדיקת תיאום מס.',
+   type:'opt',layout:'two',fieldRef:'חלק ב – שמות המעבידים',
+   opts:[{v:'1',l:'מעסיק אחד',i:'1️⃣'},{v:'more',l:'שניים ומעלה',i:'👥'}]},
+
+  // קצבה – פנסיונר בלבד (חלק ד', שדה 258/272)
+  {id:'pension_income',sec:1,
+   cond:a=>a.profile==='retiree'||(F(a).age>=60&&!!a.income_sources?.includes('pension')),
+   text:'מה סכום הקצבה השנתית שקיבלת?',
+   hint:'כולל קרן פנסיה, ביטוח מנהלים, פרישה. הסכום החייב במס בלבד.',
+   type:'amount',ph:'0',fieldRef:'חלק ד – שדה 258'},
+
+  // עצמאי – שדה 150 בחלק ד' (הכנסה נטו מעסק)
+  {id:'self_net_income',sec:1,cond:a=>F(a).isSelf,
+   text:'מה ההכנסה הנטו מהעסק לאחר כל ההוצאות?',
+   hint:'מדוח רווח והפסד – שורת רווח נקי לפני מס. זה שדה 150 בחלק ד\'.',
+   type:'amount',ph:'0',fieldRef:'חלק ד – שדה 150'},
+
+  // עצמאי – שדה 238 בחלק ז' (מחזור) – נפרד מהכנסה הנטו!
+  {id:'self_turnover',sec:1,cond:a=>F(a).isSelf,
+   text:'מה המחזור השנתי הכולל של העסק (ללא מע"מ)?',
+   hint:'חלק ז\' בטופס, שדה 238. נפרד מהרווח – זה סה"כ ההכנסות לפני הוצאות.',
+   type:'amount',ph:'0',fieldRef:'חלק ז – שדה 238'},
+
+  // סוג עוסק – עצמאי בלבד
+  {id:'vat_type',sec:1,cond:a=>F(a).isSelf,
+   text:'מה סוג הרישום שלך במע"מ?',
+   hint:'משפיע על אופן הדיווח ועל חובת טופס 6111.',
+   type:'opt',
+   opts:[{v:'exempt',l:'עוסק פטור',i:'🟢',d:'מחזור עד ~102,000 ₪'},
+         {v:'licensed',l:'עוסק מורשה',i:'🔵',d:'מחזור מעל ~102,000 ₪'},
+         {v:'company',l:'חברה בע"מ',i:'🏢',d:'חברה משפחתית / מעטים'}]},
+
+  // הנהלת חשבונות – עצמאי מורשה/חברה בלבד (לא עוסק פטור)
+  {id:'bookkeeping',sec:1,cond:a=>F(a).isSelf&&a.vat_type!=='exempt',
+   text:'כיצד ניהלת את הספרים?',
+   hint:'נדרש לחלק א\' בטופס.',
+   type:'opt',
+   opts:[{v:'double',l:'הנהלת חשבונות כפולה',i:'📚'},{v:'single',l:'חד-צדדית',i:'📓'}]},
+
+  // ── חלק ה': הכנסות בשיעורי מס מיוחדים ──
+
+  // שכירות – חלק ה', שדה 222/284 (למשקיעים ומי שסימן rent)
+  {id:'rent_amount',sec:1,
+   cond:a=>F(a).isInv||a.income_sources?.includes('rent'),
+   text:'מה סכום הכנסות השכירות השנתיות?',
+   hint:'חלק ה\' בטופס. הכנסה עד ~5,070 ₪/חודש – ייתכן פטור מלא.',
+   type:'amount',ph:'0',fieldRef:'חלק ה – שדה 222/284'},
+
+  // סוג נכס – רק אם יש הכנסות שכירות
+  {id:'rent_type',sec:1,
+   cond:a=>(F(a).isInv||a.income_sources?.includes('rent'))&&parseInt(a.rent_amount||0)>0,
+   text:'מה סוג הנכס המושכר?',
+   hint:'קובע את מסלול המיסוי ושדה הדיווח.',
+   type:'opt',
+   opts:[{v:'residential',l:'דירה למגורים בישראל',i:'🏠'},{v:'commercial',l:'נכס מסחרי',i:'🏢'},{v:'abroad',l:'נכס בחו"ל',i:'🌍'}]},
+
+  // ני"ע ריבית דיבידנד – חלק ה', שדות 060/067/157/055/141 (משקיעים)
+  {id:'capital_types',sec:1,
+   cond:a=>['investor','complex'].includes(a.profile)||a.income_sources?.includes('capital'),
+   text:'אילו הכנסות הוניות היו לך ב-2022?',
+   hint:'כל אחת ממוסה בשיעור שונה בחלק ה\'.',
+   type:'multi',fieldRef:'חלק ה – ני"ע/ריבית/דיבידנד',
+   opts:[{v:'stocks',l:'מניות / קרנות נאמנות',i:'📈'},{v:'interest',l:'ריבית פיקדונות / אג"ח',i:'💰'},
+         {v:'dividend',l:'דיבידנד',i:'🏦'},{v:'crypto',l:'מטבע וירטואלי',i:'₿'}]},
+
+  // ── חלק ט': הכנסות חו"ל ──
+  {id:'abroad_amount',sec:1,
+   cond:a=>a.income_sources?.includes('abroad')||['new_imm','ret_senior','returning'].includes(a.immigration),
+   text:'מה סכום ההכנסות מחו"ל (בשקלים)?',
+   hint:'חלק ט\', שדה 290. מחייב גם מילוי נספח ד\' לטופס.',
+   type:'amount',ph:'0',fieldRef:'חלק ט – שדה 290'},
+
+  // ══ SEC 2: ניכויים וזיכויים ════════════════════════════════════════════════
+
+  // ── חלק יב': ניכויים אישיים ──
+
+  // פנסיה עצמאי – שדה 135 בחלק יב' (עצמאי בלבד; לשכיר – המעסיק מדווח בשדה 180)
+  {id:'pension_self',sec:2,cond:a=>F(a).isSelf,
+   text:'האם הפקדת לפנסיה כעמית עצמאי ב-2022?',
+   hint:'חלק יב\', שדה 135. ניכוי עד 16% מהכנסה החייבת. לשכיר – המעסיק מדווח אוטומטית.',
+   type:'opt',layout:'two',fieldRef:'חלק יב – שדה 135',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'✓'}]},
+
+  {id:'pension_self_amount',sec:2,cond:a=>a.pension_self==='yes',
+   text:'מה סכום ההפקדה השנתית לפנסיה (כעמית עצמאי)?',
+   hint:'מאישור קרן הפנסיה. הסכום לניכוי מחושב אוטומטית – רשום את מה שהפקדת.',
+   type:'amount',ph:'0',fieldRef:'חלק יב – שדה 135'},
+
+  // קרן השתלמות – שדה 136/137 בחלק יב' (עצמאי ושכיר)
+  {id:'study_fund',sec:2,cond:a=>F(a).isSelf||F(a).isSalary,
+   text:'האם הפקדת לקרן השתלמות ב-2022?',
+   hint:'שדה 136/137. עצמאי – ניכוי עד 4.5% מהכנסה. שכיר – המעסיק מדווח, אבל אם הפקדת מעבר לתקרה – יש לדווח.',
+   type:'opt',layout:'two',fieldRef:'חלק יב – שדה 136/137',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'✓'}]},
+
+  // ביטוח לאומי – שדה 030 בחלק יב' (עצמאי בלבד – לשכיר נוכה אוטומטית)
+  {id:'bituach_leumi',sec:2,cond:a=>F(a).isSelf,
+   text:'כמה שילמת בביטוח לאומי כעצמאי ב-2022?',
+   hint:'חלק יב\', שדה 030. 52% מהסכום מוכר כניכוי. לשכיר – אין לדווח, נוכה אוטומטית.',
+   type:'amount',ph:'0',fieldRef:'חלק יב – שדה 030'},
+
+  // ── חלק יד': זיכויים אישיים ──
+
+  // תרומות – שדה 037 בחלק יד' (לכולם)
+  {id:'donations',sec:2,
+   text:'האם תרמת למוסדות ציבור מוכרים (סעיף 46) ב-2022?',
+   hint:'חלק יד\', שדה 037. מינימום 190 ₪ = זיכוי מס של 35%.',
+   type:'opt',layout:'two',fieldRef:'חלק יד – שדה 037',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'❤️'}]},
+
+  {id:'donations_amount',sec:2,cond:a=>a.donations==='yes',
+   text:'מה סכום התרומות הכולל ב-2022?',
+   hint:'צרף קבלות מקוריות מהמוסדות.',
+   type:'amount',ph:'0',fieldRef:'חלק יד – שדה 037'},
+
+  // ביטוח חיים – שדה 036 בחלק יד' (לכולם)
+  {id:'life_insurance',sec:2,
+   text:'האם שילמת פרמיות לביטוח חיים ב-2022?',
+   hint:'חלק יד\', שדה 036. זיכוי חלקי.',
+   type:'opt',layout:'two',fieldRef:'חלק יד – שדה 036',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'🛡️'}]},
+
+  // ── חלק יג': נקודות זיכוי ──
+
+  // צבא – שדה 024 בחלק יג' – גיל 18–42 בלבד
+  {id:'military',sec:2,cond:a=>F(a).canBeSoldier,
+   text:'האם השתחררת משירות סדיר בשנים 2020–2022?',
+   hint:'חלק יג\', שדה 024/124. זיכוי עד 3 שנים לאחר השחרור. מחוץ לטווח גיל זה – לא רלוונטי.',
+   type:'opt',layout:'two',fieldRef:'חלק יג – שדה 024/124',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'🎖️'}]},
+
+  {id:'military_months',sec:2,cond:a=>a.military==='yes',
+   text:'כמה חודשי שירות סדיר שירתת?',
+   hint:'מעל 23 חודש = נקודות זיכוי גבוהות יותר.',
+   type:'int',min:1,max:48,ph:'0',fieldRef:'חלק יג – שדה 024/124'},
+
+  // תואר אקדמאי – שדה 181 בחלק יג' – גיל 22–52 בלבד
+  {id:'academic',sec:2,cond:a=>F(a).canHaveDegree,
+   text:'האם סיימת תואר אקדמאי / לימודי מקצוע בשנים 2018–2022?',
+   hint:'חלק יג\', שדה 181/182. זיכוי בשנת הסיום ובשנתיים לאחריה. מחוץ לטווח גיל זה – לא רלוונטי.',
+   type:'opt',layout:'two',fieldRef:'חלק יג – שדה 181/182',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'🎓'}]},
+
+  // ══ SEC 3: פרטים נוספים ════════════════════════════════════════════════════
+
+  // ── חלק ח': רווח הון ──
+  // נכסים בחו"ל – משקיעים / עולים / מי שיש לו הכנסות חו"ל
+  {id:'assets_abroad',sec:3,
+   cond:a=>a.immigration!=='israeli'||F(a).isInv||a.income_sources?.includes('abroad'),
+   text:'האם היו לך נכסים בחו"ל בשווי 2,018,000 ₪ ומעלה?',
+   hint:'חובת דיווח – צרף טופס 150.',
+   type:'opt',layout:'two',fieldRef:'חלק א – טופס 150',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'🌍'}]},
+
+  // קריפטו – רק למי שלא כבר סימן בהכנסות הוניות
+  {id:'crypto',sec:3,cond:a=>!a.capital_types?.includes('crypto'),
+   text:'האם מימשת מטבע וירטואלי (כולל המרות) ב-2022?',
+   hint:'חלק ח\' – נספח ג\'. כל המרה בין מטבעות = אירוע מס.',
+   type:'opt',layout:'two',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'₿'}]},
+
+  // ── חלק יא': הפסדים – עצמאי ומשקיע בלבד ──
+  {id:'losses',sec:3,cond:a=>F(a).isSelf||F(a).isInv,
+   text:'האם היו לך הפסדים עסקיים או הוניים ב-2022?',
+   hint:'חלק יא\', שדה 079 (עסקי) / 166 (נכס בית) / 299 (הפסד חו"ל). ניתן לקיזוז ולהעברה. לשכיר / פנסיונר – לא רלוונטי.',
+   type:'opt',layout:'two',fieldRef:'חלק יא – שדה 079/166',
+   opts:[{v:'no',l:'לא',i:'✗'},{v:'yes',l:'כן',i:'📉'}]},
+
+  // Privacy / חשבון בנק – אחרון
+  {id:'_privacy',sec:3,text:'__privacy__',type:'privacy'},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let S={idx:0,ans:{},errs:{},priv:false};
+function vis(){return QS.filter(q=>!q.cond||q.cond(S.ans))}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  const app=document.getElementById('app');
+  const qs=vis();
+  if(S.idx>=qs.length){renderSummary(app,qs);return;}
+  const q=qs[S.idx],pct=(S.idx/qs.length)*100,sec=q.sec;
+  app.innerHTML=`
+  <div class="prog-wrap">
+    <div class="prog-head"><span class="sec-label">${SECS[sec]||'פרטים נוספים'}</span><span class="prog-count">${S.idx+1} / ${qs.length}</span></div>
+    <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+  </div>
+  <div class="chips">${SECS.map((s,i)=>`<div class="chip ${i<sec?'done':i===sec?'active':''}">${i<sec?'✓ ':''}${s}</div>`).join('')}</div>
+  <div class="ai"><div class="ai-name"><div class="dot"></div> עוזר המס</div>${ctx(q)}</div>
+  <div class="card">
+    <div class="q-meta">שאלה ${S.idx+1} ${q.fieldRef?`<span class="ftag">${q.fieldRef}</span>`:''}</div>
+    ${q.type==='privacy'?renderPrivacy():`<div class="q-text">${q.text}</div>${q.hint?`<div class="q-hint">${q.hint}</div>`:''}${inp(q)}`}
+  </div>
+  ${warn(q)}
+  <div class="actions">
+    <button class="btn-next" id="nb" onclick="nxt()">${S.idx===qs.length-1?'צור סיכום ←':'הבא ←'}</button>
+    ${S.idx>0?`<button class="btn-back" onclick="bck()">→ חזור</button>`:''}
+  </div>`;
+  updateBtn(q);
+}
+
+function renderPrivacy(){
+  const on=S.priv;
+  return`
+  <div class="q-text">האם ברצונך להוסיף פרטים אישיים רגישים לסיכום?</div>
+  <div class="q-hint" style="margin-bottom:14px">כגון ת"ז, פרטי חשבון בנק להחזר מס. הנתונים מוצגים בסיכום בלבד ולא נשמרים בשרת.</div>
+  <div class="priv-toggle ${on?'on':''}" onclick="togglePriv()">
+    <div class="tog-sw"></div>
+    <div class="priv-text">
+      <strong>${on?'✓ כן – הוסף פרטים רגישים לסיכום':'הוסף ת"ז ופרטי חשבון בנק'}</strong>
+      <span>לא נשמר בשרת. מוצג בסיכום המסך בלבד.</span>
+    </div>
+  </div>
+  <div class="sens-fields ${on?'show':''}">
+    <div class="sens-grid">
+      <div><label class="sens-label">מספר זהות</label><input class="inp" type="text" placeholder="9 ספרות" maxlength="9" value="${S.ans.id_num||''}" oninput="sv('id_num',this.value)"></div>
+      <div><label class="sens-label">שם מלא</label><input class="inp" type="text" placeholder="שם פרטי ומשפחה" value="${S.ans.full_name||''}" oninput="sv('full_name',this.value)"></div>
+    </div>
+    <div class="sens-grid">
+      <div><label class="sens-label">שם הבנק</label><input class="inp" type="text" placeholder="לדוגמה: הפועלים" value="${S.ans.bank_name||''}" oninput="sv('bank_name',this.value)"></div>
+      <div><label class="sens-label">סמל סניף (שדה 278)</label><input class="inp" type="text" placeholder="000" value="${S.ans.bank_branch||''}" oninput="sv('bank_branch',this.value)"></div>
+    </div>
+    <div><label class="sens-label">מספר חשבון (שדה 277)</label><input class="inp" type="text" placeholder="מספר חשבון" value="${S.ans.bank_account||''}" oninput="sv('bank_account',this.value)" style="max-width:260px"></div>
+  </div>`;
+}
+
+function togglePriv(){S.priv=!S.priv;render()}
+
+function inp(q){
+  const v=S.ans[q.id],e=S.errs[q.id];
+  if(q.type==='opt'){
+    const cls=q.layout==='two'?'grid two':'grid';
+    return`<div class="${cls}">${q.opts.map(o=>`
+      <button class="opt ${v===o.v?'sel':''}" onclick="pick('${q.id}','${o.v}')">
+        <span class="opt-icon">${o.i}</span>
+        <div><div>${o.l}</div>${o.d?`<div class="opt-desc">${o.d}</div>`:''}</div>
+      </button>`).join('')}</div>`;
+  }
+  if(q.type==='multi'){
+    const sel=v||[];
+    return`<div class="grid">${q.opts.map(o=>`
+      <div class="chk ${sel.includes(o.v)?'on':''}" onclick="tog('${q.id}','${o.v}')">
+        <div class="box">${sel.includes(o.v)?'✓':''}</div>
+        <span class="opt-icon">${o.i}</span>
+        <div>${o.l}</div>
+      </div>`).join('')}
+    </div><div style="margin-top:9px;font-size:12px;color:var(--dim)">לחץ "הבא" לאחר הסימון</div>`;
+  }
+  if(q.type==='age')return`
+    <input class="inp ${e?'err':''}" type="number" placeholder="לדוגמה: 35" value="${v||''}" min="0" max="120"
+      oninput="sv('${q.id}',this.value);vAge(this.value)" style="max-width:170px">
+    ${e?`<div class="vm er">${e}</div>`:v?`<div class="vm ok">✓ גיל ${v}</div>`:''}`;
+  if(q.type==='int')return`
+    <input class="inp ${e?'err':''}" type="number" placeholder="${q.ph}" value="${v||''}" min="${q.min||0}" max="${q.max||99}"
+      oninput="sv('${q.id}',this.value)" style="max-width:150px">
+    ${e?`<div class="vm er">${e}</div>`:''}`;
+  if(q.type==='amount')return`
+    <div class="ig">
+      <input class="inp" type="number" placeholder="${q.ph}" value="${v||''}" min="0" oninput="sv('${q.id}',this.value)" style="flex:1">
+      <div class="pfx">₪</div>
+    </div>
+    ${v>0?`<div class="vm ok">₪${Number(v).toLocaleString('he-IL')}</div>`:''}`;
+  return'';
+}
+
+// ── CONTEXT ───────────────────────────────────────────────────────────────────
+function ctx(q){
+  const a=S.ans,f=F(a);
+  const pL={employee_simple:'שכיר/ה',employee_complex:'שכיר/ה מורכב/ת',self_employed:'עצמאי/ת',investor:'משקיע/ה',retiree:'פנסיונר/ית',complex:'פרופיל מורכב'};
+  const m={
+    profile:'קובע את כל מסלול השאלות.',
+    marital:`זיהיתי: <strong>${pL[a.profile]||'—'}</strong>.`,
+    age_num:'הגיל קובע ישירות אילו נקודות זיכוי רלוונטיות.',
+    has_children:'ילדים → חלק יג\' בטופס.',
+    children_custody:'חזקה קובעת מי מקבל את הזיכוי.',
+    children_count:'נדרש לחישוב נקודות הזיכוי.',
+    disability:'נכות 100% → פטור על הכנסות (חלק י\').',
+    immigration:'עולים/חוזרים ותיקים → הקלות מס (שדות 274/273).',
+    income_sources:'קובע אילו חלקים בטופס ממלאים.',
+    salary_amount:'חלק ד\' בטופס.',
+    num_employers:a.num_employers==='more'?'⚠️ מספר מעסיקים = יש לסכם טפסי 106 + תיאום מס.':'שאלה מהירה.',
+    pension_income:'חלק ד\', שדה 258/272.',
+    self_net_income:'חלק ד\', שדה 150 – רווח נקי לאחר הוצאות.',
+    self_turnover:'חלק ז\', שדה 238 – נפרד מהרווח.',
+    vat_type:'משפיע על חובות דיווח.',
+    bookkeeping:'נדרש לחלק א\' בטופס.',
+    rent_amount:'חלק ה\', שדה 222/284.',
+    rent_type:'קובע את שדה הדיווח ומסלול המיסוי.',
+    capital_types:'כל סוג → שדה אחר בחלק ה\'.',
+    abroad_amount:'חלק ט\', שדה 290.',
+    pension_self:'חלק יב\', שדה 135 – עצמאי בלבד.',
+    pension_self_amount:'צרף אישור מקרן הפנסיה.',
+    study_fund:'חלק יב\', שדה 136/137.',
+    bituach_leumi:'חלק יב\', שדה 030 – עצמאי בלבד.',
+    donations:'חלק יד\', שדה 037.',
+    donations_amount:'צרף קבלות מוסדות ציבור מוכרים.',
+    life_insurance:'חלק יד\', שדה 036.',
+    military:`גילך (${f.age}) בטווח הרלוונטי לזיכוי חייל (חלק יג\').`,
+    military_months:'מעל 23 חודש = זיכוי גבוה יותר.',
+    academic:`גילך (${f.age}) בטווח שבו ייתכן תואר לאחרונה (חלק יג\').`,
+    assets_abroad:'חובת דיווח – טופס 150.',
+    crypto:'חלק ח\' – נספח ג\'.',
+    losses:'חלק יא\', שדה 079/166.',
+    _privacy:'פרטים רגישים – מוצגים בסיכום בלבד.',
+  };
+  return m[q.id]||'ענה על השאלה הבאה.';
+}
+
+// ── WARNINGS ──────────────────────────────────────────────────────────────────
+function warn(q){
+  const a=S.ans;
+  if(q.id==='num_employers'&&a.num_employers==='more')
+    return`<div class="info">⚠️ שני מעסיקים ומעלה – סכם את טפסי 106. ודא שביצעת תיאום מס.</div>`;
+  if(q.id==='self_turnover'&&parseInt(a.self_turnover||0)>256410)
+    return`<div class="info">⚠️ מחזור מעל 256,410 ₪ – חובה לצרף טופס 6111 (חלק ז\').</div>`;
+  if(q.id==='rent_type'&&a.rent_type==='residential')
+    return`<div class="info ok">✓ דירה למגורים: 3 מסלולים – פטור / 10% קבוע (שדה 222) / מס שולי. בחר לפי מה שמשתלם.</div>`;
+  if((q.id==='crypto'&&a.crypto==='yes')||a.capital_types?.includes('crypto'))
+    return`<div class="info">₿ קריפטו → נספח ג\'. כל המרה = אירוע מס. יש לתעד כל עסקה.</div>`;
+  return'';
+}
+
+function vAge(v){
+  const n=parseInt(v);
+  if(!v)delete S.errs['age_num'];
+  else if(isNaN(n)||n<0||n>120)S.errs['age_num']='גיל לא תקין.';
+  else delete S.errs['age_num'];
+  updateBtn(vis()[S.idx]);
+}
+
+function updateBtn(q){
+  const btn=document.getElementById('nb');if(!btn)return;
+  const v=S.ans[q.id],e=S.errs[q.id];
+  let ok=false;
+  if(q.type==='opt')     ok=!!v;
+  else if(q.type==='multi')  ok=Array.isArray(v)&&v.length>0;
+  else if(q.type==='age')    ok=!!v&&!e&&parseInt(v)>=0&&parseInt(v)<=120;
+  else if(q.type==='int')    ok=!!v&&parseInt(v)>=(q.min||0);
+  else if(q.type==='amount') ok=true;
+  else if(q.type==='privacy')ok=true;
+  btn.disabled=!ok;
+}
+
+function pick(id,val){S.ans[id]=val;render();setTimeout(()=>{const b=document.getElementById('nb');if(b&&!b.disabled)setTimeout(()=>nxt(),300)},70)}
+function tog(id,val){if(!S.ans[id])S.ans[id]=[];const arr=[...S.ans[id]],i=arr.indexOf(val);i>-1?arr.splice(i,1):arr.push(val);S.ans[id]=arr;render()}
+function sv(id,val){S.ans[id]=val;updateBtn(vis()[S.idx])}
+function nxt(){const qs=vis();if(S.idx<qs.length)S.idx++;render();window.scrollTo({top:0,behavior:'smooth'})}
+function bck(){if(S.idx>0)S.idx--;render();window.scrollTo({top:0,behavior:'smooth'})}
+
+// ── SUMMARY ───────────────────────────────────────────────────────────────────
+function renderSummary(app,qs){
+  const a=S.ans,f=F(a);
+  const pL={employee_simple:'שכיר/ה – מעסיק אחד',employee_complex:'שכיר/ה – מורכב',self_employed:'עצמאי/ת',investor:'משקיע/ה',retiree:'פנסיונר/ית',complex:'מורכב'};
+  const mL={single:'רווק/ה',married:'נשוי/אה',separated:'פרוד/ה',divorced:'גרוש/ה',widowed:'אלמן/ה'};
+  const iL={new_imm:'עולה חדש/ה',ret_senior:'תושב/ת חוזר/ת ותיק/ה',returning:'תושב/ת חוזר/ת'};
+
+  app.innerHTML=`
+  <div class="sum-card">
+    <div class="q-meta" style="margin-bottom:10px">✓ סיכום פרופיל מס</div>
+    <div class="sum-title">פרופיל מס 2022</div>
+    <div class="sum-sub">${qs.length} שאלות מותאמות אישית</div>
+
+    <div class="sum-sec">
+      <div class="sum-sec-title">👤 פרטים אישיים</div>
+      ${S.priv&&a.full_name?`<div class="sum-row"><span class="sum-key">שם</span><span class="sum-val">${a.full_name}</span></div>`:''}
+      ${S.priv&&a.id_num?`<div class="sum-row"><span class="sum-key">ת"ז</span><span class="sum-val">${a.id_num}</span></div>`:''}
+      <div class="sum-row"><span class="sum-key">סוג נישום</span><span class="sum-val">${pL[a.profile]||'—'}</span></div>
+      <div class="sum-row"><span class="sum-key">מצב משפחתי</span><span class="sum-val">${mL[a.marital]||'—'}</span></div>
+      <div class="sum-row"><span class="sum-key">גיל</span><span class="sum-val">${a.age_num||'—'}</span></div>
+      ${a.has_children==='yes'?`<div class="sum-row"><span class="sum-key">ילדים</span><span class="sum-val">${a.children_count||'?'} (${a.children_custody==='full'?'חזקה מלאה':a.children_custody==='shared'?'משמורת':'ללא חזקה'})</span></div>`:''}
+      ${a.immigration&&a.immigration!=='israeli'?`<div class="sum-row"><span class="sum-key">מעמד</span><span class="sum-val">${iL[a.immigration]||'—'}</span></div>`:''}
+    </div>
+
+    ${buildGuide(a,f)}
+
+    ${S.priv&&(a.bank_name||a.bank_branch||a.bank_account)?`
+    <div class="sum-sec" style="margin-top:16px">
+      <div class="sum-sec-title">🏦 פרטי חשבון בנק – שדות 277/278 בחלק א\'</div>
+      ${a.bank_name?`<div class="sum-row"><span class="sum-key">שם הבנק</span><span class="sum-val">${a.bank_name}</span></div>`:''}
+      ${a.bank_branch?`<div class="sum-row"><span class="sum-key">סמל סניף (שדה 278)</span><span class="sum-val">${a.bank_branch}</span></div>`:''}
+      ${a.bank_account?`<div class="sum-row"><span class="sum-key">מספר חשבון (שדה 277)</span><span class="sum-val">${a.bank_account}</span></div>`:''}
+    </div>`:''}
+
+    <div class="info ok" style="margin-top:12px">✓ הפרופיל הושלם. עבור שדה אחר שדה לפי המדריך למעלה.</div>
+    <div class="export-btns">
+      <button class="btn-export" onclick="window.print()">🖨️ הדפסה / שמור PDF</button>
+      <button class="btn-export" onclick="emailMe()">📧 שלח במייל</button>
+      <button class="btn-next" style="margin-top:0" onclick="restart()">← התחל מחדש</button>
+    </div>
+  </div>`;
+}
+
+// ── BUILD GUIDE ───────────────────────────────────────────────────────────────
+// מחלק את המדריך לפי חלקי הטופס בדיוק
+function buildGuide(a,f){
+  const sections=[];
+
+  // ── חלק א' – פרטים כלליים ──
+  const secA=[];
+  secA.push({f:'מצב משפחתי',d:`סמן X: ${({single:'רווק/ה',married:'נשוי/אה',separated:'פרוד/ה',divorced:'גרוש/ה',widowed:'אלמן/ה'})[a.marital]||'—'}`,s:'בחירתך בשאלון'});
+  if(a.immigration!=='israeli'&&a.immigration)secA.push({f:'שדות 274/273',d:`${({new_imm:'עולה חדש/ה',ret_senior:'תושב/ת חוזר/ת ותיק/ה',returning:'תושב/ת חוזר/ת'})[a.immigration]} – סמן ומלא תאריך`,s:'אישור עלייה / חזרה'});
+  if(a.assets_abroad==='yes')secA.push({f:'טופס 150',d:'נכסים בחו"ל – צרף טופס 150',s:'הצהרה עצמית'});
+  sections.push({title:'חלק א\' – פרטים כלליים',rows:secA});
+
+  // ── חלק ד' – הכנסות בשיעורי מס רגילים ──
+  const secD=[];
+  if(f.isSalary)secD.push({f:'שדה 158',d:`הכנסת עבודה ברוטו: ${nis(a.salary_amount)}${a.num_employers==='more'?' (סכום כל טפסי 106)':''}`,s:'טופס 106 – "סך הכנסה ברוטו"'});
+  if(f.isSelf)secD.push({f:'שדה 150',d:`הכנסה נטו מעסק: ${nis(a.self_net_income)}`,s:'דוח רווח והפסד – שורת רווח נקי'});
+  if(f.isRetired||a.pension_income)secD.push({f:'שדה 258',d:`קצבה: ${nis(a.pension_income)}`,s:'אישור קרן הפנסיה'});
+  if(secD.length)sections.push({title:'חלק ד\' – הכנסות חייבות (שיעור רגיל)',rows:secD});
+
+  // ── חלק ה' – הכנסות בשיעורי מס מיוחדים ──
+  const secE=[];
+  if(a.rent_amount&&parseInt(a.rent_amount)>0){
+    const rentField=a.rent_type==='abroad'?'שדה 225/285':a.rent_type==='commercial'?'שדה 059':'שדה 222/284';
+    secE.push({f:rentField,d:`שכירות (${a.rent_type==='residential'?'דירה מגורים':a.rent_type==='commercial'?'מסחרי':'חו"ל'}): ${nis(a.rent_amount)}`,s:'סה"כ דמי שכירות שהתקבלו'});
+  }
+  if(a.capital_types?.includes('interest'))secE.push({f:'שדה 067/157',d:'ריבית פיקדונות / אג"ח',s:'טופס 867 מהבנק'});
+  if(a.capital_types?.includes('dividend'))secE.push({f:'שדה 055/141',d:'דיבידנד',s:'אישור חלוקת דיבידנד'});
+  if(a.capital_types?.includes('stocks'))secE.push({f:'נספח ג/ג1/ג2',d:'רווח הון ממניות / קרנות – מלא נספח ג',s:'טופס 867 / אישורי ברוקר'});
+  if(a.capital_types?.includes('crypto')||a.crypto==='yes')secE.push({f:'נספח ג',d:'מטבע וירטואלי – מלא נספח ג. כל המרה = אירוע מס',s:'גיליון עסקאות מלא'});
+  if(secE.length)sections.push({title:'חלק ה\' – הכנסות בשיעורי מס מיוחדים',rows:secE});
+
+  // ── חלק ז' – נתונים נוספים (עצמאי בלבד) ──
+  if(f.isSelf){
+    const secZ=[];
+    secZ.push({f:'שדה 238',d:`מחזור עסק: ${nis(a.self_turnover)}`,s:'מסמכי מע"מ / הנהלת חשבונות'});
+    if(parseInt(a.self_turnover||0)>256410)secZ.push({f:'טופס 6111',d:'⚠️ חובה לצרף – מחזור מעל 256,410 ₪',s:'הפק מתוכנת הנהלת חשבונות'});
+    sections.push({title:'חלק ז\' – נתונים נוספים (עצמאי)',rows:secZ});
+  }
+
+  // ── חלק ט' – הכנסות חו"ל ──
+  if(f.hasAbroad&&a.abroad_amount&&parseInt(a.abroad_amount)>0){
+    sections.push({title:'חלק ט\' – הכנסות מחו"ל',rows:[
+      {f:'שדה 290',d:`הכנסות מחו"ל: ${nis(a.abroad_amount)}`,s:'מסמכי הכנסה מחו"ל + נספח ד'}
+    ]});
+  }
+
+  // ── חלק י' – הכנסות פטורות ──
+  if(a.disability==='yes'){
+    sections.push({title:'חלק י\' – הכנסות פטורות',rows:[
+      {f:'שדה 109',d:'נכות 100% – סמן X. הכנסות פטורות יירשמו בשדה 332/309',s:'אישור נכות'}
+    ]});
+  }
+
+  // ── חלק יא' – הפסדים ──
+  if(a.losses==='yes'){
+    const secYA=[];
+    if(f.isSelf)secYA.push({f:'שדה 079',d:'הפסד עסקי – רשום סכום ההפסד להעברה',s:'דוח רווח והפסד'});
+    if(f.isInv)secYA.push({f:'שדה 166/179',d:'הפסד הוני / נכס בית – להעברה',s:'חישוב רווח הון'});
+    if(secYA.length)sections.push({title:'חלק יא\' – הפסדים להעברה',rows:secYA});
+  }
+
+  // ── חלק יב' – ניכויים אישיים ──
+  const secYB=[];
+  if(a.pension_self==='yes')secYB.push({f:'שדה 135',d:`הפקדה לפנסיה כעמית עצמאי: ${nis(a.pension_self_amount)}`,s:'אישור הפקדות מקרן הפנסיה'});
+  if(a.study_fund==='yes')secYB.push({f:'שדה 136/137',d:'קרן השתלמות – ניכוי',s:'אישור קרן ההשתלמות'});
+  if(a.bituach_leumi&&parseInt(a.bituach_leumi)>0)secYB.push({f:'שדה 030',d:`ביטוח לאומי עצמאי: ${nis(a.bituach_leumi)} (52% מוכר בניכוי)`,s:'שוברי ביטוח לאומי'});
+  if(secYB.length)sections.push({title:'חלק יב\' – ניכויים אישיים',rows:secYB});
+
+  // ── חלק יג' – נקודות זיכוי ──
+  const secYG=[];
+  secYG.push({f:'שדה 020',d:'תושב ישראל – 2 נקודות זיכוי (אוטומטי)',s:'—'});
+  if(a.has_children==='yes')secYG.push({f:'שדה 260',d:`${a.children_count||'?'} ילדים (${a.children_custody==='full'?'חזקה מלאה':a.children_custody==='shared'?'משמורת':'ללא חזקה'}) – מלא לפי טבלת גיל`,s:'פרטי הילדים'});
+  if(a.single_parent==='yes')secYG.push({f:'שדה 026',d:'הורה יחידני/ת – סמן X',s:'הצהרה'});
+  if(a.military==='yes')secYG.push({f:'שדה 024/124',d:`חייל משוחרר – ${a.military_months||'?'} חודשי שירות`,s:'תעודת שחרור מצה"ל'});
+  if(a.academic==='yes')secYG.push({f:'שדה 181/182',d:'תואר אקדמאי / לימודי מקצוע – מלא קוד ושנת סיום',s:'תעודת סיום + טופס 119'});
+  sections.push({title:'חלק יג\' – נקודות זיכוי',rows:secYG});
+
+  // ── חלק יד' – זיכויים אישיים ──
+  const secYD=[];
+  if(a.donations==='yes')secYD.push({f:'שדה 037',d:`תרומות: ${nis(a.donations_amount)} – זיכוי 35%`,s:'קבלות מוסדות מוכרים (סעיף 46)'});
+  if(a.life_insurance==='yes')secYD.push({f:'שדה 036',d:'ביטוח חיים – זיכוי חלקי',s:'אישור מחברת הביטוח'});
+  if(secYD.length)sections.push({title:'חלק יד\' – זיכויים אישיים',rows:secYD});
+
+  // ── חלק טו' – ניכויים במקור ──
+  const secTZ=[];
+  if(f.isSalary)secTZ.push({f:'שדה 042',d:'מס שנוכה ממשכורת',s:'טופס 106 – "מס שנוכה"'});
+  if(f.isInv||(a.capital_types?.length))secTZ.push({f:'שדה 043',d:'ניכוי במקור מהכנסות הון',s:'טופס 867 מהבנק'});
+  if(secTZ.length)sections.push({title:'חלק טו\' – ניכויים במקור',rows:secTZ});
+
+  if(!sections.some(s=>s.rows.length))return'';
+
+  return`<div class="guide-box">
+    <div class="guide-section-title" style="margin-bottom:14px;font-size:12px;color:var(--accent);font-weight:700">📋 מדריך מילוי – לפי חלקי הטופס</div>
+    ${sections.filter(s=>s.rows.length).map(s=>`
+    <div class="guide-section">
+      <div class="guide-section-title">${s.title}</div>
+      ${s.rows.map(r=>`
+      <div class="guide-row">
+        <div class="g-field">${r.f}</div>
+        <div><div class="g-desc">${r.d}</div><div class="g-src">מאיפה: ${r.s}</div></div>
+      </div>`).join('')}
+    </div>`).join('')}
+  </div>`;
+}
+
+function nis(v){if(!v||v==0)return'₪0';return'₪'+Number(v).toLocaleString('he-IL')}
+
+function emailMe(){
+  const a=S.ans,f=F(a);
+  const lines=['סיכום דוח שנתי 2022','===================',''];
+  if(f.isSalary)lines.push(`חלק ד - שדה 158: משכורת ברוטו: ${nis(a.salary_amount)}`);
+  if(f.isSelf){lines.push(`חלק ד - שדה 150: הכנסת עסק נטו: ${nis(a.self_net_income)}`);lines.push(`חלק ז - שדה 238: מחזור: ${nis(a.self_turnover)}`);}
+  if(a.rent_amount&&parseInt(a.rent_amount)>0)lines.push(`חלק ה - שכירות: ${nis(a.rent_amount)}`);
+  lines.push('');lines.push('לשאלות פנה לרואה חשבון.');
+  window.location.href=`mailto:?subject=${encodeURIComponent('סיכום דוח מס 2022')}&body=${encodeURIComponent(lines.join('\n'))}`;
+}
+
+function restart(){S={idx:0,ans:{},errs:{},priv:false};render()}
+render();
+</script>
+</body>
+</html>
